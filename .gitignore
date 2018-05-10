@@ -1,1 +1,10 @@
+# general
+.DS_Store
 .tmp
+node_modules
+
+# netlify
+netlify-web/public/service-worker.js
+netlify-web/public/assets/data
+netlify-web/public/assets/js
+netlify-web/public/assets/css

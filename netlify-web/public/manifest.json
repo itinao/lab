@@ -15,7 +15,7 @@
 		"type": "image/png"
 	}],
 	"name": "Lab PWA",
-	"short_name": "Lav",
+	"short_name": "Lab",
 	"start_url": "./",
 	"theme_color": "#000000"
 }

@@ -13,7 +13,7 @@ export type CommonState = {
 };
 
 const INITIAL_STATE: CommonState = {
-  pageId: 'calc',
+  pageId: 'top',
 };
 
 export const CommonReducer = ReduxActions.handleActions({

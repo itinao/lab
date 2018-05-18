@@ -5,6 +5,7 @@ import * as ReactRedux from 'react-redux';
 import * as Redux from 'redux';
 import * as CommonActionCreators from './action-creators/common-action-creators';
 
+import TopPage from './view/top/page';
 import type {CommonAction} from './actions/common-actions';
 import type {RootState} from './store/root';
 
@@ -16,13 +17,11 @@ type Props = {
 class App extends React.Component<Props> {
   render() {
     const {pageId} = this.props.state.common;
+    console.log(pageId);
 
     return (
       <div>
-        <div>abc {pageId}</div>
-        <button type="button" onClick={this.props.onChangeButtonClick.bind(this, "setting")}>change setting</button>
-        <button type="button" onClick={this.props.onChangeButtonClick.bind(this, "calc")}>change calc</button>
-        <button type="button" onClick={this.props.onReloadButtonClick}>reload</button>
+        <TopPage/>
       </div>
     );
   }

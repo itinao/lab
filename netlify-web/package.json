@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev-server": "http-server ./public",
+    "dev-server": "http-server -c0 ./public",
     "dev-watch": "webpack --watch",
     "lint": "eslint 'src/js/**/*'",
     "flow": "flow --show-all-errors",

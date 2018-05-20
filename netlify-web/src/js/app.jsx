@@ -17,7 +17,6 @@ type Props = {
 class App extends React.Component<Props> {
   render() {
     const {pageId} = this.props.state.common;
-    console.log(pageId);
 
     return (
       <div>

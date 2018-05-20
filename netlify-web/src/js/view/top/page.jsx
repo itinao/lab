@@ -10,6 +10,7 @@ import ClassName from '../../misc/class-name';
 import AppBar from '../common/app-bar';
 import * as Tab from '../common/tab-root';
 import PwaPage from './pwa-page';
+import PaymentPage from './payment-page';
 import AboutPage from './about-page';
 
 import type {RootState} from '../../store/root';
@@ -31,33 +32,23 @@ class TopPage extends React.Component<Props> {
   render() {
     const {pageState} = this.props;
 
-    console.log(pageState);
-
     return (
       <div className={className()}>
         <div className={className('appBarLayout')}>
-          <AppBar title="Lab PWA">
-            <button
-              className="common-appBarButton"
-              onClick={() => {console.log("click title");}}
-              onTouchStart={EMPTY_HANDLER}
-            >
-              Close
-            </button>
-          </AppBar>
+          <AppBar title="Lab PWA"/>
         </div>
         <div className={className('tabLayout')}>
           <Tab.Root
             activeItemId={pageState.tabId}
             items={[
               {id: 'pwa', title: 'PWA'},
-              {id: 'pwa-2', title: 'PWA-2'},
+              {id: 'payment', title: 'Payment'},
               {id: 'about', title: 'About'},
             ]}
             onItemClick={this.props.onTabItemClick}
           >
             <PwaPage/>
-            <PwaPage/>
+            <PaymentPage/>
             <AboutPage/>
           </Tab.Root>
         </div>

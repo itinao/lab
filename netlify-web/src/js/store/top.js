@@ -13,7 +13,7 @@ export type TopState = {
 };
 
 const INITIAL_STATE: TopState = {
-  tabId: 'theme',
+  tabId: 'pwa',
 };
 
 export const TopReducer = ReduxActions.handleActions({

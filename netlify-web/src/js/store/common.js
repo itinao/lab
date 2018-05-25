@@ -21,5 +21,11 @@ export const CommonReducer = ReduxActions.handleActions({
     return Util.updateState(state, {
       pageId: action.pageId,
     });
-  }
- }, INITIAL_STATE);
+  },
+
+  COMMON_UPDATE_OUTDATED(state, action: CommonUpdateOutdatedAction) {
+    return Util.updateState(state, {
+    outdated: action.outdated,
+    });
+  },
+}, INITIAL_STATE);

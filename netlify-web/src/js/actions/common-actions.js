@@ -7,5 +7,9 @@ export type CommonChangePageAction = {
   type: 'COMMON_CHANGE_PAGE',
 };
 
-export type CommonAction = CommonChangePageAction;
-//export type CommonAction = CommonChangePageAction | CommonChangeThemeAction;
+export type CommonUpdateOutdatedAction = {
+  outdated: boolean,
+  type: 'COMMON_UPDATE_OUTDATED',
+};
+
+export type CommonAction = CommonChangePageAction | CommonUpdateOutdatedAction;

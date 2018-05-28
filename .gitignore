@@ -2,6 +2,7 @@
 .DS_Store
 .tmp
 node_modules
+package-lock.json
 
 # netlify
 netlify-web/public/service-worker.js

@@ -41,14 +41,14 @@ class TopPage extends React.Component<Props> {
           <Tab.Root
             activeItemId={pageState.tabId}
             items={[
-              {id: 'pwa', title: 'PWA'},
               {id: 'payment', title: 'Payment'},
+              {id: 'pwa', title: 'PWA'},
               {id: 'about', title: 'About'},
             ]}
             onItemClick={this.props.onTabItemClick}
           >
-            <PwaPage/>
             <PaymentPage/>
+            <PwaPage/>
             <AboutPage/>
           </Tab.Root>
         </div>

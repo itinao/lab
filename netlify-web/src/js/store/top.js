@@ -13,7 +13,7 @@ export type TopState = {
 };
 
 const INITIAL_STATE: TopState = {
-  tabId: 'pwa',
+  tabId: 'payment',
 };
 
 export const TopReducer = ReduxActions.handleActions({

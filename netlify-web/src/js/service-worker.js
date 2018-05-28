@@ -6,8 +6,8 @@ const FILES_TO_CACHE = [
 ];
 
 function updateCache() {
-  caches.open(CACHE_NAME).then((cache) => {
-//    return cache.addAll(FILES_TO_CACHE);
+  return caches.open(CACHE_NAME).then((cache) => {
+    return cache.addAll(FILES_TO_CACHE);
   });
 }
 

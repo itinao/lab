@@ -9,10 +9,12 @@ import type {
 import type {PageId} from '../model/page-id';
 
 export type CommonState = {
+  outdated: boolean,
   pageId: PageId,
 };
 
 const INITIAL_STATE: CommonState = {
+  outdated: false,
   pageId: 'top',
 };
 
@@ -25,7 +27,7 @@ export const CommonReducer = ReduxActions.handleActions({
 
   COMMON_UPDATE_OUTDATED(state, action: CommonUpdateOutdatedAction) {
     return Util.updateState(state, {
-    outdated: action.outdated,
+      outdated: action.outdated,
     });
   },
 }, INITIAL_STATE);

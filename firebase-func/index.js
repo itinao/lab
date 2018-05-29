@@ -1,13 +1,25 @@
-console.log('Loading function')
+const functions = require('firebase-functions');
+const url = require('url');
+const request = require('request');
 
-exports.handler = function(event, context) {
-    console.log('value1 =', event.key1)
-    console.log('value2 =', event.key2)
-    console.log('value3 =', event.key3)
-    console.log('hello world!')
-    console.log('おはようございます。')
-    console.log('おはようございます！！')
-    context.succeed(event.key1);  // Echo back the first key value
-    // context.fail('Something went wrong');
-}
+const headers = {
+  'Content-Type':'application/xml'
+};
 
+const options = {
+  method: 'GET',
+  headers: headers,
+};
+
+exports.rss = functions.https.onRequest((req, res) => {
+  const orgUrl = url.parse(req.originalUrl).query;
+
+  if (req.method === "GET") {
+    options["url"] = orgUrl;
+    request(options, function (error, response, body) {
+      res.status(200).send(body);
+    })
+  } else {
+    res.status(404).end();
+  }
+});

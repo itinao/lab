@@ -1,0 +1,10 @@
+{
+  "name": "firebase-func",
+  "description": "",
+  "dependencies": {
+    "firebase": "^5.0.4",
+    "firebase-admin": "^5.12.1",
+    "firebase-functions": "^1.0.3",
+    "request": "^2.87.0"
+  }
+}

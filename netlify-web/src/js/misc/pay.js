@@ -1,0 +1,9 @@
+// @flow
+
+const Pay = {
+  updateState<State>(state: State, newState: $Shape<State>): State {
+    return Object.assign({}, state, newState);
+  },
+};
+
+export default Pay;

@@ -6,6 +6,7 @@ import * as Redux from 'redux';
 
 import * as TopActionCreators from '../../action-creators/top-action-creators';
 import ClassName from '../../misc/class-name';
+import Payment from '../../misc/payment';
 
 import type {RootState} from '../../store/root';
 
@@ -14,6 +15,7 @@ type Props = {
 };
 
 const className = ClassName('top', 'paymentPage');
+const payment = new Payment();
 
 class PaymentPage extends React.Component<Props> {
   constructor(props: Props) {
@@ -21,17 +23,42 @@ class PaymentPage extends React.Component<Props> {
   }
 
   render() {
-    if (!window.PaymentRequest) {
-      return (
-        <div className={className()}>
-          <div className={className('section')}>
-            <h1 className={className('title')}>
-              PaymentRequest
-            </h1>
-            <div className={className('detail')}>
-              <p>PaymentRequest Non Suported.</p>
-            </div>
-          </div>
+    let buttonElem = null;
+    if (payment.isSupportedApplePay) {
+      buttonElem = (
+        <div className={className('paymentArea')}>
+          <button
+            className={className('applePay')}
+            onClick={this.props.onPaymentClick}
+          >
+          </button>
+        </div>
+      );
+    } else if (payment.isSupportedGooglePay) {
+      buttonElem = (
+        <div className={className('paymentArea')}>
+          <button
+            className={className('googlePay')}
+            onClick={this.props.onPaymentClick}
+          >
+          </button>
+        </div>
+      );
+    } else if (payment.isSupported) {
+      buttonElem = (
+        <div className={className('paymentArea')}>
+          <button
+            className={className('cardPay')}
+            onClick={this.props.onPaymentClick}
+          >
+            CardPay!!
+          </button>
+        </div>
+      );
+    } else {
+      buttonElem = (
+        <div className={className('detail')}>
+          <p>PaymentRequest Non Suported.</p>
         </div>
       );
     }
@@ -42,13 +69,7 @@ class PaymentPage extends React.Component<Props> {
           <h1 className={className('title')}>
             PaymentRequest
           </h1>
-          <div className={className('detail')}>
-            <button
-              onClick={this.props.onPaymentClick}
-            >
-              payment
-            </button>
-          </div>
+          {buttonElem}
         </div>
       </div>
     );
@@ -63,132 +84,7 @@ function mapStateToProps(state: RootState) {
 function mapDispatchToProps(dispatch: Redux.Dispatch<*>) {
   return {
     onPaymentClick() {
-      const isSupported = window.PaymentRequest != null;
-      const isSupportedApple = isSupported && window.ApplePaySession && ApplePaySession.canMakePayments();
-      if (isSupportedApple) {
-        try {
-          const applePayMethod = {
-            supportedMethods: "https://apple.com/apple-pay",
-            data: {
-              version: 3,
-              merchantIdentifier: "merchant.com.example",
-              merchantCapabilities: ["supports3DS", "supportsCredit", "supportsDebit"],
-              supportedNetworks: ["amex", "discover", "masterCard", "visa"],
-              countryCode: "US",
-            },
-          };
-
-          const paymentDetails = {
-            total: {
-              label: "My Merchant",
-              amount: { value: "27.50", currency: "USD" },
-            },
-            displayItems: [{
-              label: "Tax",
-              amount: { value: "2.50", currency: "USD" },
-            }, {
-              label: "Ground Shipping",
-              amount: { value: "5.00", currency: "USD" },
-            }],
-            shippingOptions: [{
-              id: "ground",
-              label: "Ground Shipping",
-              amount: { value: "5.00", currency: "USD" },
-              selected: true,
-            }, {
-              id: "express",
-              label: "Express Shipping",
-              amount: { value: "10.00", currency: "USD" },
-            }],
-          };
-
-          const paymentOptions = {
-            requestPayerName: true,
-            requestPayerEmail: true,
-            requestPayerPhone: true,
-            requestShipping: true,
-            shippingType: "shipping",
-          };
-
-          const request = new PaymentRequest([applePayMethod], paymentDetails, paymentOptions);
-
-          request.onmerchantvalidation = function (event) {
-            // Have your server fetch a payment session from event.validationURL.
-            const sessionPromise = fetchPaymentSession(event.validationURL);
-            event.complete(sessionPromise);
-          };
-
-          request.onshippingoptionchange = function (event) {
-            // Compute new payment details based on the selected shipping option.
-            const detailsUpdatePromise = computeDetails();
-            event.updateWith(detailsUpdatePromise);
-          };
-
-          request.onshippingaddresschange = function (event) {
-            // Compute new payment details based on the selected shipping address.
-            const detailsUpdatePromise = computeDetails();
-            event.updateWith(detailsUpdatePromise);
-          };
-
-          request.show().then(result => {
-            console.log("result");
-            console.log(result);
-          });
-//      const response = await request.show();
-//      const status = processResponse(response);
-//      response.complete(status);
-        } catch (e) {
-          console.log(e);
-        }
-
-        return;
-     }
-
-      // Supported payment methods
-      const supportedInstruments = [{
-        supportedMethods: ['basic-card'],
-        data: {
-          supportedNetworks: [
-            'visa', 'mastercard', 'amex', 'discover',
-            'diners', 'jcb', 'unionpay'
-          ]
-        }
-      }];
-
-      // Checkout details
-      const details = {
-        displayItems: [{
-          label: 'Original donation amount',
-          amount: { currency: 'USD', value: '65.00' }
-        }, {
-          label: 'Friends and family discount',
-          amount: { currency: 'USD', value: '-10.00' }
-        }],
-        total: {
-          label: 'Total due',
-          amount: { currency: 'USD', value : '55.00' }
-        }
-      };
-
-      const request = new PaymentRequest(supportedInstruments, details);
-      request.show().then(result => {
-        return fetch('/pay', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(result.toJSON())
-        }).then(response => {
-          if (response.status === 200) {
-            return result.complete('success');
-          } else {
-            return result.complete('fail');
-          }
-        }).catch(() => {
-          return result.complete('fail');
-        });
-      });
+      payment.pay();
     }
   };
 }

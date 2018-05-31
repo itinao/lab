@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta http-equiv="content-language" content="ja">
+  <meta name="apple-mobile-web-app-title" content="Lab PWA">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#000000">
+  <link rel="apple-touch-icon" href="assets/img/icon/180x180.png">
+  <link rel="apple-touch-startup-image" href="assets/img/launch.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/img/icon/favicon.ico" type="image/x-icon">
+  <title>Lab PWA</title>
+  <style>
+    html {
+      background-color: black;
+      color: white;
+    }
+  </style>
+  <link rel="stylesheet" href="assets/css/bundle.css">
+</head>
+<body>
+  <div id="appContainer"></div>
+  <script>
+    if (navigator.serviceWorker) {
+      navigator.serviceWorker.register('service-worker.js').then(function(reg) {
+      }).catch(function(err) {
+        console.error('Registration failed:', err);
+      });
+    }
+  </script>
+  <script src="assets/js/bundle.js"></script>
+</body>
+</html>

@@ -11,7 +11,7 @@ default:
 		@echo "   clear-cache                   Execute cloudfront clear cache"
 
 deploy-s3:
-		aws s3 sync $(CUR_DIR)/s3-web/ s3://itinao-test --delete
+		aws s3 sync $(CUR_DIR)/s3-web/public/ s3://itinao-test --delete
 
 deploy-lambda:
 		@if [ ! -d ./.tmp ]; \

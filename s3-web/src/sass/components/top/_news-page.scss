@@ -1,0 +1,57 @@
+$prefix: 'top';
+
+.#{$prefix}-newsPage {
+  padding: 2rem;
+
+  &_section {
+    & + & {
+      margin-top: 2rem;
+    }
+  }
+  &_title {
+  }
+  &_detail {
+    line-height: 1.5;
+    margin-top: 0.5em;
+
+    ul {
+      position: relative;
+      padding: 0 0.5em;
+      margin-top: 0em;
+      list-style-type: none;
+      border: solid 2px #FFF;
+    }
+
+    ul::after {
+      position: absolute;
+      content: attr(title);
+      padding: 1px 7px;
+      letter-spacing: 0.05em;
+      font-weight: bold;
+      font-size: .8em;
+      background: #FFF;
+      color: #fff;
+      bottom: 100%;
+      left: -2px;
+      border-radius: 4px 4px 0px 0px;
+    }
+
+    ul li {
+      line-height: 1.5;
+      padding: 0.5em 0 0.5em 1.4em;
+      border-bottom: 1px dashed #FFF;
+    }
+
+    ul li::before {
+      position: absolute;
+      content: "\002713";
+      color: #FFF;
+      font-weight: bold;
+      left : 0.5em;
+    }
+
+    ul li:last-of-type {
+      border-bottom: none;
+    }
+  }
+}

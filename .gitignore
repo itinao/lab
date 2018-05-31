@@ -4,8 +4,8 @@
 node_modules
 package-lock.json
 
-# netlify
-netlify-web/public/service-worker.js
-netlify-web/public/assets/data
-netlify-web/public/assets/js
-netlify-web/public/assets/css
+# s3-web
+s3-web/public/service-worker.js
+s3-web/public/assets/data
+s3-web/public/assets/js
+s3-web/public/assets/css

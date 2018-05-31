@@ -3,8 +3,6 @@ const url = require('url');
 const request = require('request');
 const FeedParser = require('feedparser');
 
-const feedparser = new FeedParser({});
-
 exports.rss = functions.https.onRequest((req, res) => {
   const orgUrl = url.parse(req.originalUrl).query;
   const items = [];
@@ -12,7 +10,7 @@ exports.rss = functions.https.onRequest((req, res) => {
   if (req.method === "GET") {
     const feedReq = request(orgUrl);
     feedReq.on('response', function (response) {
-      this.pipe(feedparser)
+      this.pipe(new FeedParser({}))
         .on('error', function(error) {
           response.status(500).json({
             'message': 'HTTP failure while fetching feed'

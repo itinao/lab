@@ -9,7 +9,7 @@ import ClassName from '../../misc/class-name';
 
 import AppBar from '../common/app-bar';
 import * as Tab from '../common/tab-root';
-import PwaPage from './pwa-page';
+import NewsPage from './news-page';
 import PaymentPage from './payment-page';
 import AboutPage from './about-page';
 
@@ -41,14 +41,14 @@ class TopPage extends React.Component<Props> {
           <Tab.Root
             activeItemId={pageState.tabId}
             items={[
+              {id: 'news', title: 'News'},
               {id: 'payment', title: 'Payment'},
-              {id: 'pwa', title: 'PWA'},
               {id: 'about', title: 'About'},
             ]}
             onItemClick={this.props.onTabItemClick}
           >
+            <NewsPage/>
             <PaymentPage/>
-            <PwaPage/>
             <AboutPage/>
           </Tab.Root>
         </div>

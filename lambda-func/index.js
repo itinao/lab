@@ -1,13 +1,21 @@
-console.log('Loading function')
+const request = require('request');
+const FeedParser = require('feedparser');
 
-exports.handler = function(event, context) {
-    console.log('value1 =', event.key1)
-    console.log('value2 =', event.key2)
-    console.log('value3 =', event.key3)
-    console.log('hello world!')
-    console.log('おはようございます。')
-    console.log('おはようございます！！')
-    context.succeed(event.key1);  // Echo back the first key value
-    // context.fail('Something went wrong');
+exports.rss = (event, context) => {
+  const items = [];
+  const feedReq = request(event.url);
+
+  feedReq.on('response', function (response) {
+    this.pipe(new FeedParser({}))
+      .on('meta', function(meta) {
+      })
+      .on('readable', function() {
+        while(item = this.read()) {
+          items.push({title: item.title, link: item.link});
+        }
+      })
+      .on('end', function() {
+        context.succeed(items);
+      });
+  });
 }
-

@@ -17,7 +17,7 @@ deploy-lambda:
 		@if [ ! -d ./.tmp ]; \
 			then echo "mkdir -p ./.tmp"; mkdir -p ./.tmp; \
 		fi
-		zip -rj ./.tmp/lambda-func.zip lambda-func
+		cd lambda-func && zip -r ../.tmp/lambda-func.zip index.js node_modules
 		aws lambda update-function-code \
 			--function-name hello_function \
 			--zip-file fileb://.tmp/lambda-func.zip \

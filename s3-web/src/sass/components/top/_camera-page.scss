@@ -1,0 +1,25 @@
+$prefix: 'top';
+
+.#{$prefix}-cameraPage {
+  padding: 2rem;
+
+  &_section {
+    & + & {
+      margin-top: 2rem;
+    }
+  }
+  &_title {
+  }
+  &_detail {
+    line-height: 1.5;
+    margin-top: 0em;
+
+    p + p {
+      margin-top: 0.5em;
+    }
+  }
+
+  video {
+    width: 100%;
+  }
+}

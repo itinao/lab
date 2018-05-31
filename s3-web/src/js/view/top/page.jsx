@@ -10,8 +10,8 @@ import ClassName from '../../misc/class-name';
 import AppBar from '../common/app-bar';
 import * as Tab from '../common/tab-root';
 import NewsPage from './news-page';
+import CameraPage from './camera-page';
 import PaymentPage from './payment-page';
-import AboutPage from './about-page';
 
 import type {RootState} from '../../store/root';
 import type {TopState} from '../../store/top';
@@ -42,14 +42,14 @@ class TopPage extends React.Component<Props> {
             activeItemId={pageState.tabId}
             items={[
               {id: 'news', title: 'News'},
+              {id: 'camera', title: 'Camera'},
               {id: 'payment', title: 'Payment'},
-              {id: 'about', title: 'About'},
             ]}
             onItemClick={this.props.onTabItemClick}
           >
             <NewsPage/>
+            <CameraPage/>
             <PaymentPage/>
-            <AboutPage/>
           </Tab.Root>
         </div>
       </div>

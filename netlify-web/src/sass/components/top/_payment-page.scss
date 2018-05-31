@@ -4,6 +4,8 @@ $prefix: 'top';
   padding: 2rem;
 
   &_section {
+    text-align: center;
+
     & + & {
       margin-top: 2rem;
     }

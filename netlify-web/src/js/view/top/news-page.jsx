@@ -42,6 +42,10 @@ class NewsPage extends React.Component<Props> {
       newsElem = (
         <ul>
           {this.news.datas.map((data) => {
+            if (!data.link || !data.title) {
+              return null;
+            }
+
             return <li key={data.link}><a href={data.link}>{data.title}</a></li>;
           })}
         </ul>
@@ -53,9 +57,6 @@ class NewsPage extends React.Component<Props> {
     return (
       <div className={className()}>
         <div className={className('section')}>
-          <h1 className={className('title')}>
-            News
-          </h1>
           <div className={className('detail')}>
             {newsElem}
           </div>

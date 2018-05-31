@@ -66,9 +66,6 @@ class PaymentPage extends React.Component<Props> {
     return (
       <div className={className()}>
         <div className={className('section')}>
-          <h1 className={className('title')}>
-            PaymentRequest
-          </h1>
           {buttonElem}
         </div>
       </div>

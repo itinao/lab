@@ -22,6 +22,10 @@ deploy-lambda:
 			--function-name hello_function \
 			--zip-file fileb://.tmp/lambda-func.zip \
 			--publish
+		aws lambda update-function-code \
+			--function-name storeRss \
+			--zip-file fileb://.tmp/lambda-func.zip \
+			--publish
 
 clear-cache:
 		aws cloudfront create-invalidation --distribution-id E1OJ34BPFDJM5X --paths '/*'

@@ -2,6 +2,7 @@
   "name": "lambda-func",
   "description": "",
   "dependencies": {
+    "aws-sdk": "^2.249.1",
     "feedparser": "^2.2.9",
     "request": "^2.87.0"
   }

@@ -17,5 +17,6 @@
   "name": "Lab PWA",
   "short_name": "Lab",
   "start_url": "./",
-  "theme_color": "#000000"
+  "theme_color": "#000000",
+  "gcm_sender_id": "103953800507"
 }

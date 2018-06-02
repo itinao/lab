@@ -38,3 +38,30 @@ self.addEventListener('message', (ev) => {
     });
   }
 });
+
+self.addEventListener('push', (ev) => {
+  let json = ev.data.json();
+  let baseURL = json.data.url;
+
+  ev.waitUntil(
+    self.registration.showNotification(
+      json.notification.title, {
+        'body': json.notification.body,
+        'tag': 'request',
+        'actions': JSON.parse(json.data.action)
+      }
+    )
+  );
+});
+
+self.addEventListener('notificationclick', (ev) => {
+  if (ev.action === 'select-a') {
+    self.clients.openWindow('http://yahoo.co.jp');
+  } else if (event.action === 'select-b') {
+    self.clients.openWindow('http://google.com');
+  } else {
+    self.clients.openWindow(baseURL);
+  }
+
+  ev.notification.close();
+});

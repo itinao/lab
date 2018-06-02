@@ -15,6 +15,8 @@ import Snackbar from './view/common/snackbar';
 import type {CommonAction} from './actions/common-actions';
 import type {RootState} from './store/root';
 
+import request from './misc/request';
+
 type Props = {
   onReloadButtonClick: () => void,
   state: RootState,
@@ -39,6 +41,9 @@ class App extends React.Component<Props> {
             messaging.onMessage((payload) => {
               console.log("Message received. ", payload)
             })
+            request.tokenRegister(currentToken, () => {
+              console.log("finished request.tokenRegister");
+            }, () => {});
             console.log(currentToken);
           }).catch((err) => {
             console.log('An error occurred while retrieving token. ', err)
@@ -49,6 +54,9 @@ class App extends React.Component<Props> {
 
         messaging.onTokenRefresh(() => {
           messaging.getToken().then((refreshedToken) => {
+            request.tokenRegister(refreshedToken, () => {
+              console.log("finished request.tokenRegister");
+            }, () => {});
             console.log('Token refreshed: ' + refreshedToken)
           }).catch((err) => {
             console.log('Unable to retrieve refreshed token ', err)

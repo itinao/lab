@@ -17,7 +17,7 @@ deploy-lambda:
 		@if [ ! -d ./.tmp ]; \
 			then echo "mkdir -p ./.tmp"; mkdir -p ./.tmp; \
 		fi
-		cd lambda-func && zip -r ../.tmp/lambda-func.zip index.js node_modules
+		cd lambda-func && zip -r ../.tmp/lambda-func.zip index.js credentials.js node_modules
 		aws lambda update-function-code \
 			--function-name hello_function \
 			--zip-file fileb://.tmp/lambda-func.zip \
@@ -26,7 +26,14 @@ deploy-lambda:
 			--function-name storeRss \
 			--zip-file fileb://.tmp/lambda-func.zip \
 			--publish
-
+		aws lambda update-function-code \
+			--function-name topicRegister \
+			--zip-file fileb://.tmp/lambda-func.zip \
+			--publish
+		aws lambda update-function-code \
+			--function-name sendTopicTest \
+			--zip-file fileb://.tmp/lambda-func.zip \
+			--publish
 clear-cache:
 		aws cloudfront create-invalidation --distribution-id E1OJ34BPFDJM5X --paths '/*'
 

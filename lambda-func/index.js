@@ -6,12 +6,14 @@ const dynamo = new AWS.DynamoDB({
     region: 'ap-northeast-1'
 });
 
+const credentials = require('./credentials');
+
 exports.rss = (event, context) => {
   // TODO: Dynamo ってソートできない?
   dynamo.scan(
     {TableName: "rss"},
     (err, data) => {
-      let content = [];
+      let content = '[]';
       if (data.Items.length != 0) {
         data.Items.sort((a, b) => {
           if (a.updated_date.S > b.updated_date.S) return -1;
@@ -24,7 +26,7 @@ exports.rss = (event, context) => {
 
       context.succeed(JSON.parse(content));
     });
-}
+};
 
 exports.storeRss = (event, context) => {
   const getStoreData = (callback) => {
@@ -55,7 +57,7 @@ exports.storeRss = (event, context) => {
           }
         })
         .on('end', function() {
-          callback(updatedDate.getTime().toString(), JSON.stringify(items));
+          callback(updatedDate.getTime().toString(), items);
         });
     });
   }
@@ -65,7 +67,7 @@ exports.storeRss = (event, context) => {
       TableName: "rss",
       Item: {
         updated_date: {S: updatedDate},
-        content: {S: data}
+        content: {S: JSON.stringify(data)}
       }
     };
 
@@ -85,9 +87,13 @@ exports.storeRss = (event, context) => {
 
       if (updatedDate != rssUpdatedDate) {
         console.log("update!");
-        storeData(rssUpdatedDate, data, context.succeed.bind(this, null));
-
-        // TODO: ここでPush通知
+        storeData(rssUpdatedDate, data, () => {
+          sendTopic({
+            title: 'ニュースが更新されました',
+            body: data[0].title,
+            content_available: true
+          }, context.succeed.bind(this, null));
+        });
 
         return;
       }
@@ -95,4 +101,50 @@ exports.storeRss = (event, context) => {
       context.succeed(null);
     });
   });
-}
+};
+
+exports.topicRegister = (event, context) => {
+  const topic = '/topics/movies';
+  const url = 'https://iid.googleapis.com/iid/v1/{#TOKEN#}/rel{#TOPIC#}';
+
+  console.log(event.token);
+  request.post({
+    url: url.replace('{#TOKEN#}', event.token).replace('{#TOPIC#}', topic),
+    headers: {
+      "Authorization": 'key=' + credentials.serverKey,
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({})
+  }, (error, response, body) => {
+    console.log(body);
+    context.succeed(null);
+  });
+};
+
+exports.sendTopicTest = (event, context) => {
+  sendTopic(event.data, (error, response, body) => {
+    console.log(body);
+    context.succeed(null);
+  })
+};
+
+const sendTopic = (notificationData, callback) => {
+  const url = 'https://fcm.googleapis.com/fcm/send';
+
+  request.post({
+    url: url,
+    headers: {
+      "Authorization": 'key=' + credentials.serverKey,
+      "content-type": "application/json"
+    },
+    body: JSON.stringify({
+      to: "/topics/movies",
+      notification: notificationData,
+      data: {
+        action: []
+      }
+    })
+  }, (error, response, body) => {
+    callback(error, response, body);
+  });
+};

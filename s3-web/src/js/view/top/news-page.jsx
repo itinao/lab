@@ -6,7 +6,7 @@ import * as Redux from 'redux';
 
 import * as TopActionCreators from '../../action-creators/top-action-creators';
 import ClassName from '../../misc/class-name';
-import News from '../../misc/news';
+import request from '../../misc/request';
 
 import type {RootState} from '../../store/root';
 
@@ -24,8 +24,9 @@ class NewsPage extends React.Component<Props> {
       isFetched: false,
     };
 
-    this.news = new News();
-    this.news.fetch(() => {
+    this.newsDatas = [];
+    request.fetchNews((newsDatas) => {
+      this.newsDatas = newsDatas;
       this.setState({
         isFetched: true,
       });
@@ -41,7 +42,7 @@ class NewsPage extends React.Component<Props> {
     if (this.state.isFetched) {
       newsElem = (
         <ul>
-          {this.news.datas.map((data) => {
+          {this.newsDatas.map((data) => {
             if (!data.link || !data.title) {
               return null;
             }

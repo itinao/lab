@@ -10,6 +10,7 @@ import 'firebase/messaging';
 import credentials from './credentials'
 
 import TopPage from './view/top/page';
+import NewsContentPage from './view/news-content/page';
 import Snackbar from './view/common/snackbar';
 
 import type {CommonAction} from './actions/common-actions';
@@ -70,9 +71,13 @@ class App extends React.Component<Props> {
 
   render() {
     const {pageId} = this.props.state.common;
+    console.log("pageId: " + pageId);
     return (
       <div>
         <TopPage/>
+        <NewsContentPage
+          visible={pageId === 'news-content'}
+        />
         <Snackbar
           buttonTitle="Refresh"
           onButtonClick={this.props.onReloadButtonClick}

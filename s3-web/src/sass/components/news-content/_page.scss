@@ -1,0 +1,52 @@
+$prefix: 'news-content';
+
+@keyframes #{$prefix}-page-show {
+  0% {
+    transform: translateX(100vh);
+    visibility: visible;
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes #{$prefix}-page-hide {
+  0% {
+    transform: none;
+  }
+  100% {
+    transform: translateX(100vh);
+    visibility: hidden;
+  }
+}
+
+.#{$prefix}-page {
+  animation-fill-mode: forwards;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  transform: translateX(100vh);
+  transition: $page-background-transition;
+  width: 100%;
+  background: #000;
+  z-index: 100;
+
+  &#{&}-hide {
+    animation-duration: 0.4s;
+    animation-name: #{$prefix}-page-hide;
+    animation-timing-function: ease-in-out;
+  }
+  &#{&}-show {
+    animation-duration: 0.4s;
+    animation-name: #{$prefix}-page-show;
+    animation-timing-function: ease-in-out;
+  }
+
+  &_content {
+    width: 90%;
+    height: 85%;
+    overflow: scroll;
+    margin: 0 5%;
+  }
+}

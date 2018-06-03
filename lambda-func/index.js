@@ -13,18 +13,18 @@ exports.rss = (event, context) => {
   dynamo.scan(
     {TableName: "rss"},
     (err, data) => {
-      let content = '[]';
+      let content = [];
       if (data.Items.length != 0) {
         data.Items.sort((a, b) => {
           if (a.updated_date.S > b.updated_date.S) return -1;
           if (a.updated_date.S < b.updated_date.S) return 1;
           return 0;
         });
-        content = data.Items[0].content.S;
+        content = JSON.parse(data.Items[0].content.S).slice(0, 50);
         console.log("updated_date: " + data.Items[0].updated_date.S);
       }
 
-      context.succeed(JSON.parse(content));
+      context.succeed(content);
     });
 };
 
@@ -58,7 +58,7 @@ exports.storeRss = (event, context) => {
         })
         .on('readable', function() {
           while(item = this.read()) {
-            items.push({title: item.title, link: item.link});
+            items.push({title: item.title, link: item.link, content: item.description});
           }
         })
         .on('end', function() {

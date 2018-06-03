@@ -13,6 +13,13 @@ export function changePage(pageId: PageId): CommonAction {
   };
 }
 
+export function changeNewsContent(newsData): CommonAction {
+  return {
+    newsData,
+    type: 'COMMON_CHANGE_NEWS_CONTENT',
+  };
+}
+
 export function checkForUpdate(): any {
   return (dispatch: Redux.Dispatch<CommonAction>) => {
     Version.checkForUpdate().then((outdated) => {

@@ -34,7 +34,12 @@ exports.storeRss = (event, context) => {
       {TableName: "rss"},
       (err, data) => {
         let updatedDate = "";
-        if (data.Items.length != 0){
+        if (data.Items.length != 0) {
+          data.Items.sort((a, b) => {
+            if (a.updated_date.S > b.updated_date.S) return -1;
+            if (a.updated_date.S < b.updated_date.S) return 1;
+            return 0;
+          });
           updatedDate = data.Items[0].updated_date.S;
         }
         callback(updatedDate);

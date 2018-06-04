@@ -1,6 +1,7 @@
 // @flow
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import * as ReactRedux from 'react-redux';
 import * as Redux from 'redux';
 
@@ -41,6 +42,7 @@ class NewsContentPage extends React.Component<Props, State> {
         action: 'hide',
       });
     } else if (!oldVisible && newVisible) {
+      this.refs.content.scrollTop = 0;
       this.setState({
         action: 'show',
       });
@@ -67,7 +69,7 @@ class NewsContentPage extends React.Component<Props, State> {
             </button>
           </AppBar>
         </div>
-        <div className={className('content')} dangerouslySetInnerHTML={{__html: state.common.newsData.content}}></div>
+        <div ref="content" className={className('content')} dangerouslySetInnerHTML={{__html: state.common.newsData.content}}></div>
       </div>
     );
   }

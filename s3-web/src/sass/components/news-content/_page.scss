@@ -46,7 +46,9 @@ $prefix: 'news-content';
   &_content {
     width: 90%;
     height: 85%;
-    overflow: scroll;
     margin: 0 5%;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    overflow-y: scroll;
   }
 }

@@ -2,11 +2,14 @@ const request = require('request');
 const FeedParser = require('feedparser');
 
 const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
 const dynamo = new AWS.DynamoDB({
     region: 'ap-northeast-1'
 });
 
 const credentials = require('./credentials');
+const bucket = 'itinao-test';
+const newsFile = 'assets/data/gekisaka.json';
 
 exports.rss = (event, context) => {
   // TODO: Dynamo ってソートできない?
@@ -44,27 +47,6 @@ exports.storeRss = (event, context) => {
         }
         callback(updatedDate);
       });
-  }
-
-  const getRssData = (callback) => {
-    let updatedDate = "";
-    const items = [];
-    const feedReq = request("https://web.gekisaka.jp/feed");
-
-    feedReq.on('response', function (response) {
-      this.pipe(new FeedParser({}))
-        .on('meta', function(meta) {
-          updatedDate = meta.date;
-        })
-        .on('readable', function() {
-          while(item = this.read()) {
-            items.push({title: item.title, link: item.link, content: item.description});
-          }
-        })
-        .on('end', function() {
-          callback(updatedDate.getTime().toString(), items);
-        });
-    });
   }
 
   const storeData = (updatedDate, data, callback) => {
@@ -151,5 +133,82 @@ const sendTopic = (notificationData, callback) => {
     })
   }, (error, response, body) => {
     callback(error, response, body);
+  });
+};
+
+const getRssData = (callback) => {
+  let updatedDate = "";
+  const items = [];
+  const feedReq = request("https://web.gekisaka.jp/feed");
+
+  feedReq.on('response', function (response) {
+    this.pipe(new FeedParser({}))
+      .on('meta', function(meta) {
+        updatedDate = meta.date;
+      })
+      .on('readable', function() {
+        while(item = this.read()) {
+          items.push({title: item.title, link: item.link, content: item.description});
+        }
+      })
+      .on('end', function() {
+        callback(updatedDate.getTime().toString(), items);
+      });
+  });
+}
+
+exports.storeRssToS3 = (event, context) => {
+  getRssData((rssUpdatedDate, items) => {
+    const getParams = {
+      Bucket: bucket,
+      Key: newsFile
+    };
+
+    s3.getObject(getParams, (getErr, getData) => {
+      if (getErr && getErr.code != 'AccessDenied') {
+        console.error(getErr);
+        context.fail();
+        return;
+      }
+
+      if (!getErr) {
+        const s3News = JSON.parse(getData.Body.toString());
+        if (rssUpdatedDate == s3News.updated_date) {
+          // 最新だから更新しないよ
+          console.log("not update!");
+          context.succeed(null);
+          return;
+        }
+      }
+
+      const putData = {
+        updated_date: rssUpdatedDate,
+        items: items
+      };
+
+      const putParams = {
+        Bucket: bucket,
+        Key: newsFile,
+        Body: JSON.stringify(putData),
+        ContentType: 'application/json',
+        ACL: 'public-read-write'
+      };
+
+      console.log("updated!");
+      s3.putObject(putParams, (putErr, putData) => {
+        if (putErr) {
+          console.error(putErr);
+          context.fail();
+          return;
+        }
+
+        console.log("complete!");
+        sendTopic({
+          title: 'ニュースが更新されました',
+          body: items[0].title,
+          content_available: true
+        }, context.succeed.bind(this, null));
+      });
+    });
   });
 };

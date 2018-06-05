@@ -2,12 +2,12 @@
 
 const request = {
   fetchNews: (onSuccess, onFailure) => {
-    fetch('https://3afp4sdaih.execute-api.ap-northeast-1.amazonaws.com/dev/rss?url=https://web.gekisaka.jp/feed', {
+    fetch('https://d1rvld1j103n12.cloudfront.net/assets/data/gekisaka.json', {
       mode: 'cors'
     }).then((response) => {
       return response.json();
     }).then((newsDatas) => {
-      onSuccess(newsDatas);
+      onSuccess(newsDatas.items);
     }).catch((error) => {
       console.log(error);
       onFailure();

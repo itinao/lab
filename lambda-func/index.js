@@ -9,62 +9,41 @@ const dynamo = new AWS.DynamoDB({
 
 const credentials = require('./credentials');
 const bucket = 'itinao-test';
-const newsFile = 'assets/data/gekisaka.json';
 
 exports.storeRssToS3 = (event, context) => {
-  getRssData((rssUpdatedDate, items) => {
-    const getParams = {
-      Bucket: bucket,
-      Key: newsFile
-    };
+  let count = 0;
+  let maxCount = 3;
 
-    s3.getObject(getParams, (getErr, getData) => {
-      if (getErr && getErr.code != 'AccessDenied') {
-        console.error(getErr);
-        context.fail();
-        return;
-      }
+  const successCallback = (message) => {
+    count++;
+    console.log("success message: " + message + " count: " + count);
+    if (maxCount <= count) {
+      context.succeed(null);
+    }
+  };
 
-      if (!getErr) {
-        const s3News = JSON.parse(getData.Body.toString());
-        if (rssUpdatedDate == s3News.updated_date) {
-          // 最新だから更新しないよ
-          console.log("not update!");
-          context.succeed(null);
-          return;
-        }
-      }
+  const failureCallback = (message) => {
+    console.log("failure message: " + message);
+    context.fail();
+  };
 
-      const putData = {
-        updated_date: rssUpdatedDate,
-        items: items
-      };
+  storeRssData(
+    'https://web.gekisaka.jp/feed?category=nationalteam',
+    'assets/data/gekisaka-nationalteam.json',
+    successCallback,
+    failureCallback);
 
-      const putParams = {
-        Bucket: bucket,
-        Key: newsFile,
-        Body: JSON.stringify(putData),
-        ContentType: 'application/json',
-        ACL: 'public-read-write'
-      };
+  storeRssData(
+    'https://web.gekisaka.jp/feed?category=domestic',
+    'assets/data/gekisaka-domestic.json',
+    successCallback,
+    failureCallback);
 
-      console.log("updated!");
-      s3.putObject(putParams, (putErr, putData) => {
-        if (putErr) {
-          console.error(putErr);
-          context.fail();
-          return;
-        }
-
-        console.log("complete!");
-        sendTopic({
-          title: 'ニュースが更新されました',
-          body: items[0].title,
-          content_available: true
-        }, context.succeed.bind(this, null));
-      });
-    });
-  });
+  storeRssData(
+    'https://web.gekisaka.jp/feed?category=foreign',
+    'assets/data/gekisaka-foreign.json',
+    successCallback,
+    failureCallback);
 };
 
 exports.topicRegister = (event, context) => {
@@ -113,10 +92,10 @@ const sendTopic = (notificationData, callback) => {
   });
 };
 
-const getRssData = (callback) => {
+const getRssData = (rssUrl, callback) => {
   let updatedDate = "";
   const items = [];
-  const feedReq = request("https://web.gekisaka.jp/feed");
+  const feedReq = request(rssUrl);
 
   feedReq.on('response', function (response) {
     this.pipe(new FeedParser({}))
@@ -131,5 +110,57 @@ const getRssData = (callback) => {
       .on('end', function() {
         callback(updatedDate.getTime().toString(), items);
       });
+  });
+};
+
+const storeRssData = (rssUrl, saveFile, successCallback, failureCallback) => {
+  getRssData(rssUrl, (rssUpdatedDate, items) => {
+    const getParams = {
+      Bucket: bucket,
+      Key: saveFile
+    };
+
+    s3.getObject(getParams, (getErr, getData) => {
+      if (getErr && getErr.code != 'AccessDenied') {
+        failureCallback(getErr.code);
+        return;
+      }
+
+      if (!getErr) {
+        const s3News = JSON.parse(getData.Body.toString());
+        if (rssUpdatedDate == s3News.updated_date) {
+          // 最新だから更新しないよ
+          successCallback("not update!");
+          return;
+        }
+      }
+
+      const putData = {
+        updated_date: rssUpdatedDate,
+        items: items
+      };
+
+      const putParams = {
+        Bucket: bucket,
+        Key: saveFile,
+        Body: JSON.stringify(putData),
+        ContentType: 'application/json',
+        ACL: 'public-read-write'
+      };
+
+      console.log("updated!");
+      s3.putObject(putParams, (putErr, putData) => {
+        if (putErr) {
+          failureCallback(putErr.code);
+          return;
+        }
+
+        sendTopic({
+          title: 'ニュースが更新されました',
+          body: items[0].title,
+          content_available: true
+        }, successCallback.bind(this, "complete: " + rssUrl));
+      });
+    });
   });
 };

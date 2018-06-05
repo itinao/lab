@@ -19,11 +19,7 @@ deploy-lambda:
 		fi
 		cd lambda-func && zip -r ../.tmp/lambda-func.zip index.js credentials.js node_modules
 		aws lambda update-function-code \
-			--function-name hello_function \
-			--zip-file fileb://.tmp/lambda-func.zip \
-			--publish
-		aws lambda update-function-code \
-			--function-name storeRss \
+			--function-name storeRssToS3 \
 			--zip-file fileb://.tmp/lambda-func.zip \
 			--publish
 		aws lambda update-function-code \
@@ -32,10 +28,6 @@ deploy-lambda:
 			--publish
 		aws lambda update-function-code \
 			--function-name sendTopicTest \
-			--zip-file fileb://.tmp/lambda-func.zip \
-			--publish
-		aws lambda update-function-code \
-			--function-name storeRssToS3 \
 			--zip-file fileb://.tmp/lambda-func.zip \
 			--publish
 clear-cache:

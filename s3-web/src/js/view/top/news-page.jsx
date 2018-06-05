@@ -26,7 +26,7 @@ class NewsPage extends React.Component<Props> {
     };
 
     this.newsDatas = [];
-    request.fetchNews((newsDatas) => {
+    request.fetchNews(this.props.category, (newsDatas) => {
       this.newsDatas = newsDatas;
       this.setState({
         isFetched: true,

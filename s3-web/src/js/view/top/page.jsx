@@ -41,14 +41,16 @@ class TopPage extends React.Component<Props> {
           <Tab.Root
             activeItemId={pageState.tabId}
             items={[
-              {id: 'news', title: 'News'},
-              {id: 'camera', title: 'Camera'},
+              {id: 'news', title: '日本代表'},
+              {id: 'news2', title: 'Jリーグ'},
+              {id: 'news3', title: '海外'},
               {id: 'payment', title: 'Payment'},
             ]}
             onItemClick={this.props.onTabItemClick}
           >
-            <NewsPage/>
-            <CameraPage/>
+            <NewsPage category="nationalteam" />
+            <NewsPage category="domestic"/>
+            <NewsPage category="foreign"/>
             <PaymentPage/>
           </Tab.Root>
         </div>

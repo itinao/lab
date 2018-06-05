@@ -1,8 +1,8 @@
 // @flow
 
 const request = {
-  fetchNews: (onSuccess, onFailure) => {
-    fetch('https://d1rvld1j103n12.cloudfront.net/assets/data/gekisaka.json', {
+  fetchNews: (category, onSuccess, onFailure) => {
+    fetch('https://d1rvld1j103n12.cloudfront.net/assets/data/gekisaka-' + category + '.json', {
       mode: 'cors'
     }).then((response) => {
       return response.json();

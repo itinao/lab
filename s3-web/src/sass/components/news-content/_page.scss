@@ -51,6 +51,11 @@ $prefix: 'news-content';
     overflow-scrolling: touch;
     overflow-y: scroll;
 
+    a {
+      color: #9596ff;
+      text-decoration: underline;
+    }
+
     img {
       width: 100%;
     }

@@ -13,7 +13,7 @@ class Firebase {
     }
   }
 
-  initializeMessaging() {
+  initializeMessaging(reg) {
     try {
       const messaging = firebase.messaging();
       messaging.useServiceWorker(reg);

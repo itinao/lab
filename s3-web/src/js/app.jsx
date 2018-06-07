@@ -23,12 +23,13 @@ class App extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
     this.firebase = new Firebase();
+    this.initializeServiceWorker();
   }
 
-  init() {
+  initializeServiceWorker() {
     if (navigator.serviceWorker) {
       navigator.serviceWorker.register('service-worker.js').then((reg) => {
-        this.firebase.initializeMessaging();
+        this.firebase.initializeMessaging(reg);
       }).catch((err) => {
         console.error('Registration failed:', err);
       });

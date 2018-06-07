@@ -4,61 +4,95 @@ import React from 'react';
 import * as ReactRedux from 'react-redux';
 import * as Redux from 'redux';
 
-import * as TopActionCreators from '../../action-creators/top-action-creators';
 import ClassName from '../../misc/class-name';
-import Payment from '../../misc/payment';
+import {ApplePayment, CreditPayment} from '../../misc/payment';
 
 import type {RootState} from '../../store/root';
 
 type Props = {
-  onPaymentClick: () => void,
+  onApplePaymentClick: () => void,
+  onCreditPaymentClick: () => void,
+};
+
+type State = {
+  isEnableApplePayment: bool,
+  isEnableCreditPayment: bool,
 };
 
 const className = ClassName('top', 'paymentPage');
-const payment = new Payment();
+const applePayment = new ApplePayment();
+const creditPayment = new CreditPayment();
 
 class PaymentPage extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
+
+    this.state = {
+      isEnableApplePayment: false,
+      isEnableCreditPayment: false,
+    };
+  }
+
+  componentDidMount() {
+    const appleTask = new Promise((resolve, reject) => {
+      applePayment.check((result) => {
+        resolve(result);
+      });
+    });
+
+    const creditTask = new Promise((resolve, reject) => {
+      creditPayment.check((result) => {
+        resolve(result);
+      });
+    });
+
+    Promise.all([appleTask, creditTask])
+      .then(([isEnableApplePayment, isEnableCreditPayment]) => {
+        // TODO: ためしに、上書き。あとでけす
+        isEnableApplePayment = true;
+        isEnableCreditPayment = true;
+
+        this.setState({
+          isEnableApplePayment: isEnableApplePayment,
+          isEnableCreditPayment: isEnableCreditPayment,
+        });
+      }).catch(() => {
+        console.log('error');
+      });
   }
 
   render() {
-    let buttonElem = null;
-    if (payment.isSupportedApplePay) {
-      buttonElem = (
+    let nonSupport = (
+      <div className={className('detail')}>
+        <p>PaymentRequest Non Suported.</p>
+      </div>
+    );
+
+    let appleButton = null;
+    if (this.state.isEnableApplePayment) {
+      nonSupport = null;
+      appleButton = (
         <div className={className('paymentArea')}>
           <button
             className={className('applePay')}
-            onClick={this.props.onPaymentClick}
+            onClick={this.props.onApplePaymentClick}
           >
           </button>
         </div>
       );
-    } else if (payment.isSupportedGooglePay) {
-      buttonElem = (
-        <div className={className('paymentArea')}>
-          <button
-            className={className('googlePay')}
-            onClick={this.props.onPaymentClick}
-          >
-          </button>
-        </div>
-      );
-    } else if (payment.isSupported) {
-      buttonElem = (
+    }
+
+    let creditButton = null;
+    if (this.state.isEnableCreditPayment) {
+      nonSupport = null;
+      creditButton = (
         <div className={className('paymentArea')}>
           <button
             className={className('cardPay')}
-            onClick={this.props.onPaymentClick}
+            onClick={this.props.onCreditPaymentClick}
           >
             CardPay!!
           </button>
-        </div>
-      );
-    } else {
-      buttonElem = (
-        <div className={className('detail')}>
-          <p>PaymentRequest Non Suported.</p>
         </div>
       );
     }
@@ -66,7 +100,9 @@ class PaymentPage extends React.Component<Props> {
     return (
       <div className={className()}>
         <div className={className('section')}>
-          {buttonElem}
+          {nonSupport}
+          {appleButton}
+          {creditButton}
         </div>
       </div>
     );
@@ -80,8 +116,11 @@ function mapStateToProps(state: RootState) {
 
 function mapDispatchToProps(dispatch: Redux.Dispatch<*>) {
   return {
-    onPaymentClick() {
-      payment.pay();
+    onApplePaymentClick() {
+      applePayment.pay();
+    },
+    onCreditPaymentClick() {
+      creditPayment.pay();
     }
   };
 }

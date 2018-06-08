@@ -49,7 +49,6 @@ class PaymentPage extends React.Component<Props> {
     Promise.all([appleTask, creditTask])
       .then(([isEnableApplePayment, isEnableCreditPayment]) => {
         // TODO: ためしに、上書き。あとでけす
-        isEnableApplePayment = true;
         isEnableCreditPayment = true;
 
         this.setState({

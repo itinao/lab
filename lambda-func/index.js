@@ -11,39 +11,51 @@ const credentials = require('./credentials');
 const bucket = 'itinao-test';
 
 exports.storeRssToS3 = (event, context) => {
-  let count = 0;
-  let maxCount = 3;
+  const nationalTask = new Promise((resolve, reject) => {
+    storeRssData(
+      'https://web.gekisaka.jp/feed?category=nationalteam',
+      'assets/data/gekisaka-nationalteam.json',
+      resolve,
+      reject);
+  });
 
-  const successCallback = (message) => {
-    count++;
-    console.log("success message: " + message + " count: " + count);
-    if (maxCount <= count) {
-      context.succeed(null);
-    }
-  };
+  const domesticTask = new Promise((resolve, reject) => {
+    storeRssData(
+      'https://web.gekisaka.jp/feed?category=domestic',
+      'assets/data/gekisaka-domestic.json',
+      resolve,
+      reject);
+  });
 
-  const failureCallback = (message) => {
-    console.log("failure message: " + message);
-    context.fail();
-  };
+  const foreignTask = new Promise((resolve, reject) => {
+    storeRssData(
+      'https://web.gekisaka.jp/feed?category=foreign',
+      'assets/data/gekisaka-foreign.json',
+      resolve,
+      reject);
+  });
 
-  storeRssData(
-    'https://web.gekisaka.jp/feed?category=nationalteam',
-    'assets/data/gekisaka-nationalteam.json',
-    successCallback,
-    failureCallback);
+  Promise.all([nationalTask, domesticTask, foreignTask])
+    .then((items) => {
+      console.log("succes!");
+      const topicItems = items.filter(v => v);
 
-  storeRssData(
-    'https://web.gekisaka.jp/feed?category=domestic',
-    'assets/data/gekisaka-domestic.json',
-    successCallback,
-    failureCallback);
+      if (topicItems.length == 0) {
+        console.log("no notification");
+        context.succeed(null);
+        return;
+      }
 
-  storeRssData(
-    'https://web.gekisaka.jp/feed?category=foreign',
-    'assets/data/gekisaka-foreign.json',
-    successCallback,
-    failureCallback);
+      console.log("send notification");
+      sendTopic({
+        title: 'ニュースが更新されました',
+        body: topicItems[0].title,
+        content_available: true
+      }, context.succeed.bind(this, null));
+    }).catch(() => {
+      console.log('error');
+      context.fail();
+    });
 };
 
 exports.topicRegister = (event, context) => {
@@ -122,7 +134,8 @@ const storeRssData = (rssUrl, saveFile, successCallback, failureCallback) => {
 
     s3.getObject(getParams, (getErr, getData) => {
       if (getErr && getErr.code != 'AccessDenied') {
-        failureCallback(getErr.code);
+        console.error(getErr.code);
+        failureCallback();
         return;
       }
 
@@ -130,7 +143,8 @@ const storeRssData = (rssUrl, saveFile, successCallback, failureCallback) => {
         const s3News = JSON.parse(getData.Body.toString());
         if (rssUpdatedDate == s3News.updated_date) {
           // 最新だから更新しないよ
-          successCallback("not update!");
+          console.log("not update!");
+          successCallback();
           return;
         }
       }
@@ -148,18 +162,15 @@ const storeRssData = (rssUrl, saveFile, successCallback, failureCallback) => {
         ACL: 'public-read-write'
       };
 
-      console.log("updated!");
       s3.putObject(putParams, (putErr, putData) => {
         if (putErr) {
-          failureCallback(putErr.code);
+          console.error(getErr.code);
+          failureCallback();
           return;
         }
 
-        sendTopic({
-          title: 'ニュースが更新されました',
-          body: items[0].title,
-          content_available: true
-        }, successCallback.bind(this, "complete: " + rssUrl));
+        console.log("updated!");
+        successCallback(items[0]);
       });
     });
   });

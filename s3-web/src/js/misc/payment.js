@@ -63,8 +63,7 @@ class Payment {
       requestPayerName: true,
       requestPayerEmail: true,
       requestPayerPhone: true,
-      requestShipping: true,
-      shippingType: "shipping",
+      requestShipping: false,
     };
 
     return paymentOptions;
@@ -87,26 +86,11 @@ class Payment {
       };
 
       request.show().then(result => {
-        // TODO: 認証のとこやってないから決済できない
-        return fetch('/pay', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(result.toJSON())
-        }).then(response => {
-          if (response.status === 200) {
-            return result.complete('success');
-          } else {
-            return result.complete('fail');
-          }
-        }).catch((e) => {
-          alert("payment failed: " + e);
-          return result.complete('fail');
-        });
+        // TODO: 決済しないよ
+        console.log(result);
+        return result.complete('success');
       }).catch((e) => {
-        alert("payment failed: " + e);
+        console.error("payment failed: " + e);
       });
     } catch (e) {
       alert("payment failed: " + e);
@@ -120,9 +104,12 @@ export class ApplePayment extends Payment {
     super();
   }
 
+  canDisplayButton() {
+    return window.PaymentRequest != null && window.ApplePaySession && ApplePaySession.canMakePayments();
+  }
+
   check(callback) {
-    const isEnable = window.PaymentRequest != null && window.ApplePaySession && ApplePaySession.canMakePayments();
-    if (!isEnable) {
+    if (!this.canDisplayButton()) {
       callback(false);
       return;
     }

@@ -48,9 +48,6 @@ class PaymentPage extends React.Component<Props> {
 
     Promise.all([appleTask, creditTask])
       .then(([isEnableApplePayment, isEnableCreditPayment]) => {
-        // TODO: ためしに、上書き。あとでけす
-        isEnableCreditPayment = true;
-
         this.setState({
           isEnableApplePayment: isEnableApplePayment,
           isEnableCreditPayment: isEnableCreditPayment,
@@ -99,9 +96,29 @@ class PaymentPage extends React.Component<Props> {
     return (
       <div className={className()}>
         <div className={className('section')}>
-          {nonSupport}
-          {appleButton}
-          {creditButton}
+          <div className={className('paymentArea')}>
+            <div>
+              ApplePay: {this.state.isEnableApplePayment ? "決済できる" : "決済できない"}
+            </div>
+            {applePayment.canDisplayButton() ? (
+              <button
+                className={className('applePay')}
+                onClick={this.props.onApplePaymentClick}
+              >
+              </button>
+              ) : "Not Supported"}
+          </div>
+          <div className={className('paymentArea')}>
+            <div>
+              クレジット: {this.state.isEnableCreditPayment ? "決済できる" : "決済できない"}
+            </div>
+            <button
+              className={className('cardPay')}
+              onClick={this.props.onCreditPaymentClick}
+            >
+              支払う
+            </button>
+          </div>
         </div>
       </div>
     );

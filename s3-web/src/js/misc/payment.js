@@ -81,8 +81,11 @@ class Payment {
       const request = this.createPaymentRequest();
 
       request.onmerchantvalidation = function (event) {
-        const sessionPromise = fetchPaymentSession(event.validationURL);
-        event.complete(sessionPromise);
+        // TODO: 認証とおせないー
+        console.log("onmerchantvalidation: " + event.validationURL);
+        setTimeout(() => {
+          event.complete({});
+        }, 10000);
       };
 
       request.show().then(result => {

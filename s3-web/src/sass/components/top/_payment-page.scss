@@ -30,7 +30,7 @@ $prefix: 'top';
       display: inline-block;
       -webkit-appearance: -apple-pay-button;
 
-      -apple-pay-button-style: white;
+      -apple-pay-button-style: white-outline;
     }
   }
 
@@ -49,6 +49,7 @@ $prefix: 'top';
 
       background-image: -webkit-named-image(apple-pay-logo-black);
       background-color: white;
+      border: .5px solid black;
     }
   }
 

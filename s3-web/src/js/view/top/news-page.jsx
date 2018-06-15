@@ -4,7 +4,6 @@ import React from 'react';
 import * as ReactRedux from 'react-redux';
 import * as Redux from 'redux';
 
-import * as TopActionCreators from '../../action-creators/top-action-creators';
 import * as CommonActionCreators from '../../action-creators/common-action-creators';
 import ClassName from '../../misc/class-name';
 import request from '../../misc/request';
@@ -72,7 +71,7 @@ class NewsPage extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(_state: RootState) {
   return {
   };
 }

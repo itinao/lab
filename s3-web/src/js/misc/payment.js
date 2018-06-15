@@ -31,25 +31,25 @@ class Payment {
 
     const paymentDetails = {
       total: {
-        label: "Lab PWA",
+        label: 'Lab PWA',
         amount: {
           value: totalAmount,
-          currency: "JPY"
+          currency: 'JPY'
         },
       },
       displayItems: [
         {
-          label: "Donation Amount",
+          label: 'Donation Amount',
           amount: {
             value: amount,
-            currency: "JPY"
+            currency: 'JPY'
           }
         },
         {
-          label: "TAX",
+          label: 'TAX',
           amount: {
             value: tax,
-            currency: "JPY"
+            currency: 'JPY'
           }
         },
       ],
@@ -82,7 +82,7 @@ class Payment {
 
       request.onmerchantvalidation = function (event) {
         // TODO: 認証とおせないー
-        console.log("onmerchantvalidation: " + event.validationURL);
+        console.log('onmerchantvalidation: ' + event.validationURL);
         setTimeout(() => {
           event.complete({});
         }, 10000);
@@ -93,11 +93,10 @@ class Payment {
         console.log(result);
         return result.complete('success');
       }).catch((e) => {
-        console.error("payment failed: " + e);
+        console.error('payment failed: ' + e);
       });
     } catch (e) {
-      alert("payment failed: " + e);
-      return result.complete('fail');
+      alert('payment failed: ' + e);
     }
   }
 }
@@ -108,7 +107,7 @@ export class ApplePayment extends Payment {
   }
 
   canDisplayButton() {
-    return window.PaymentRequest != null && window.ApplePaySession && ApplePaySession.canMakePayments();
+    return window.PaymentRequest !== null && window.ApplePaySession && window.ApplePaySession.canMakePayments();
   }
 
   check(callback) {
@@ -122,13 +121,13 @@ export class ApplePayment extends Payment {
 
   getSampleMethods() {
     return [{
-      supportedMethods: "https://apple.com/apple-pay",
+      supportedMethods: 'https://apple.com/apple-pay',
       data: {
         version: 3,
-        merchantIdentifier: "merchant.com.example",
-        merchantCapabilities: ["supports3DS", "supportsCredit", "supportsDebit"],
-        supportedNetworks: ["amex", "discover", "masterCard", "visa"],
-        countryCode: "JP",
+        merchantIdentifier: 'merchant.com.example',
+        merchantCapabilities: ['supports3DS', 'supportsCredit', 'supportsDebit'],
+        supportedNetworks: ['amex', 'discover', 'masterCard', 'visa'],
+        countryCode: 'JP',
       },
     }];
   }
@@ -141,7 +140,7 @@ export class GooglePayment extends Payment {
 
   getSampleMethods() {
     return [{
-      supportedMethods: "https://google.com/pay",
+      supportedMethods: 'https://google.com/pay',
       data: {
         apiVersion: 1,
         environment: 'TEST',

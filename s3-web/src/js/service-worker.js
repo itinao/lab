@@ -52,6 +52,6 @@ self.addEventListener('push', (ev) => {
 });
 
 self.addEventListener('notificationclick', (ev) => {
-  self.clients.openWindow("/");
+  self.clients.openWindow('/');
   ev.notification.close();
 });

@@ -10,7 +10,6 @@ import ClassName from '../../misc/class-name';
 import AppBar from '../common/app-bar';
 import * as Tab from '../common/tab-root';
 import NewsPage from './news-page';
-import CameraPage from './camera-page';
 import PaymentPage from './payment-page';
 
 import type {RootState} from '../../store/root';
@@ -21,7 +20,6 @@ type Props = {
   pageState: TopState,
 };
 
-const EMPTY_HANDLER = () => {};
 const className = ClassName('top', 'page');
 
 class TopPage extends React.Component<Props> {

@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import * as ReactRedux from 'react-redux';
 import * as Redux from 'redux';
 

@@ -17,7 +17,7 @@ const request = {
   tokenRegister: (token, onSuccess, onFailure) => {
     fetch('https://3afp4sdaih.execute-api.ap-northeast-1.amazonaws.com/dev/topicregister?token=' + token, {
       mode: 'cors'
-    }).then((response) => {
+    }).then((_response) => {
       onSuccess();
     }).catch((error) => {
       console.log(error);

@@ -38,7 +38,7 @@ class App extends React.Component<Props> {
 
   render() {
     const {pageId} = this.props.state.common;
-    console.log("pageId: " + pageId);
+    console.log('pageId: ' + pageId);
     return (
       <div>
         <TopPage/>

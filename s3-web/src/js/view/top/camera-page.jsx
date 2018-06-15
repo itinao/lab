@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom';
 import * as ReactRedux from 'react-redux';
 import * as Redux from 'redux';
 
-import * as TopActionCreators from '../../action-creators/top-action-creators';
 import ClassName from '../../misc/class-name';
 
 import type {RootState} from '../../store/root';
@@ -22,7 +21,7 @@ class CameraPage extends React.Component<Props> {
     this.onCameraClick = this.onCameraClick.bind(this);
   }
 
-  onCameraClick(e) {
+  onCameraClick(_e) {
     const video = ReactDOM.findDOMNode(this.refs.video);
     const medias = {audio : false, video : true};
     navigator.getUserMedia(
@@ -52,12 +51,12 @@ class CameraPage extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(_state: RootState) {
   return {
   };
 }
 
-function mapDispatchToProps(dispatch: Redux.Dispatch<*>) {
+function mapDispatchToProps(_dispatch: Redux.Dispatch<*>) {
   return {
   };
 }

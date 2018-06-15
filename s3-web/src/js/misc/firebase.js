@@ -21,10 +21,10 @@ class Firebase {
         console.log('Notification permission granted.');
         messaging.getToken().then((currentToken) => {
           messaging.onMessage((payload) => {
-            console.log("Message received. ", payload)
+            console.log('Message received. ', payload)
           })
           request.tokenRegister(currentToken, () => {
-            console.log("finished request.tokenRegister");
+            console.log('finished request.tokenRegister');
           }, () => {});
           console.log(currentToken);
         }).catch((err) => {
@@ -37,14 +37,14 @@ class Firebase {
       messaging.onTokenRefresh(() => {
         messaging.getToken().then((refreshedToken) => {
           request.tokenRegister(refreshedToken, () => {
-            console.log("finished request.tokenRegister");
+            console.log('finished request.tokenRegister');
           }, () => {});
           console.log('Token refreshed: ' + refreshedToken)
         }).catch((err) => {
           console.log('Unable to retrieve refreshed token ', err)
         })
       });
-    } catch(err) {
+    } catch (err) {
       console.error('FirebaseMessaging error: ', err);
     };
   }

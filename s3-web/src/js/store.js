@@ -1,7 +1,6 @@
 // @flow
 
 import * as Redux from 'redux';
-import * as ReduxPersist from 'redux-persist';
 import ReduxThunk from 'redux-thunk';
 
 import {RootReducer} from './store/root';

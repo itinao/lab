@@ -11,12 +11,8 @@ import type {RootState} from '../../store/root';
 
 type Props = {
   onApplePaymentClick: () => void,
+  onGooglePaymentClick: () => void,
   onCreditPaymentClick: () => void,
-};
-
-type State = {
-  isEnableApplePayment: bool,
-  isEnableCreditPayment: bool,
 };
 
 const className = ClassName('top', 'paymentPage');
@@ -36,19 +32,19 @@ class PaymentPage extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const appleTask = new Promise((resolve, reject) => {
+    const appleTask = new Promise((resolve, _reject) => {
       applePayment.check((result) => {
         resolve(result);
       });
     });
 
-    const googleTask = new Promise((resolve, reject) => {
+    const googleTask = new Promise((resolve, _reject) => {
       googlePayment.check((result) => {
         resolve(result);
       });
     });
 
-    const creditTask = new Promise((resolve, reject) => {
+    const creditTask = new Promise((resolve, _reject) => {
       creditPayment.check((result) => {
         resolve(result);
       });
@@ -72,7 +68,7 @@ class PaymentPage extends React.Component<Props> {
         <div className={className('section')}>
           <div className={className('paymentArea')}>
             <div>
-              ApplePay: {this.state.isEnableApplePayment ? "決済できる" : "決済できない"}
+              ApplePay: {this.state.isEnableApplePayment ? '決済できる' : '決済できない'}
             </div>
             {applePayment.canDisplayButton() ? (
               <button
@@ -80,11 +76,11 @@ class PaymentPage extends React.Component<Props> {
                 onClick={this.props.onApplePaymentClick}
               >
               </button>
-              ) : "Not Supported"}
+              ) : 'Not Supported'}
           </div>
           <div className={className('paymentArea')}>
             <div>
-              GooglePay: {this.state.isEnableGooglePayment ? "決済できる" : "決済できない"}
+              GooglePay: {this.state.isEnableGooglePayment ? '決済できる' : '決済できない'}
             </div>
             <button
               className={className('googlePay')}
@@ -94,7 +90,7 @@ class PaymentPage extends React.Component<Props> {
           </div>
           <div className={className('paymentArea')}>
             <div>
-              クレジット: {this.state.isEnableCreditPayment ? "決済できる" : "決済できない"}
+              クレジット: {this.state.isEnableCreditPayment ? '決済できる' : '決済できない'}
             </div>
             <button
               className={className('cardPay')}
@@ -109,12 +105,12 @@ class PaymentPage extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(state: RootState) {
+function mapStateToProps(_state: RootState) {
   return {
   };
 }
 
-function mapDispatchToProps(dispatch: Redux.Dispatch<*>) {
+function mapDispatchToProps(_dispatch: Redux.Dispatch<*>) {
   return {
     onApplePaymentClick() {
       applePayment.pay();

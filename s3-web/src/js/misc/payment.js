@@ -134,7 +134,6 @@ export class ApplePayment extends Payment {
   }
 }
 
-/*
 export class GooglePayment extends Payment {
   constructor() {
     super();
@@ -159,7 +158,6 @@ export class GooglePayment extends Payment {
     }];
   }
 }
-*/
 
 export class CreditPayment extends Payment {
   constructor() {

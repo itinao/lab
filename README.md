@@ -1,12 +1,22 @@
 lab
 ===================
 
-### Frontend
+### Overview
 * Push Notification
 * Offline Cache
 * Request Payment API
 
-### Backend
+### Development
+#### Frontend
+* React
+* Redux
+* sass
+* eslint
+* flow
+* mocha
+* webpack
+
+#### Backend
 * AWS S3
 * AWS Lambda
 * Amazon CloudFront

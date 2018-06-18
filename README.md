@@ -2,9 +2,10 @@ lab
 ===================
 
 ### Overview
+ServiceWorker Demo
 * Push Notification
 * Offline Cache
-* Request Payment API
+* Payment Request API
 
 ### Development
 #### Frontend

@@ -4,7 +4,7 @@ class Payment {
   constructor() {
   }
 
-  check(callback) {
+  check(callback: (value: boolean) => void) {
     if (!window.PaymentRequest) {
       callback(false);
       return;
@@ -73,7 +73,7 @@ class Payment {
     const paymentMethods = this.getSampleMethods();
     const paymentDetails = this.getSampleDetails();
     const paymentOptions = this.getSampleOptions();
-    return new PaymentRequest(paymentMethods, paymentDetails, paymentOptions);
+    return new window.PaymentRequest(paymentMethods, paymentDetails, paymentOptions);
   }
 
   pay() {
@@ -110,7 +110,7 @@ export class ApplePayment extends Payment {
     return window.PaymentRequest !== null && window.ApplePaySession && window.ApplePaySession.canMakePayments();
   }
 
-  check(callback) {
+  check(callback: (value: boolean) => void) {
     if (!this.canDisplayButton()) {
       callback(false);
       return;

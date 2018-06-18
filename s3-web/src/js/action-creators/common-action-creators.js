@@ -13,7 +13,7 @@ export function changePage(pageId: PageId): CommonAction {
   };
 }
 
-export function changeNewsContent(newsData): CommonAction {
+export function changeNewsContent(newsData: {}): CommonAction {
   return {
     newsData,
     type: 'COMMON_CHANGE_NEWS_CONTENT',

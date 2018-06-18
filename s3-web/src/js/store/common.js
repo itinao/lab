@@ -6,6 +6,7 @@ import Util from '../misc/util';
 import type {
   CommonChangePageAction,
   CommonChangeNewsContentAction,
+  CommonUpdateOutdatedAction,
 } from '../actions/common-actions';
 import type {PageId} from '../model/page-id';
 

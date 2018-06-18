@@ -15,12 +15,18 @@ type Props = {
   onCreditPaymentClick: () => void,
 };
 
+type State = {
+  isEnableApplePayment: boolean,
+  isEnableGooglePayment: boolean,
+  isEnableCreditPayment: boolean,
+};
+
 const className = ClassName('top', 'paymentPage');
 const applePayment = new ApplePayment();
 const googlePayment = new GooglePayment();
 const creditPayment = new CreditPayment();
 
-class PaymentPage extends React.Component<Props> {
+class PaymentPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 

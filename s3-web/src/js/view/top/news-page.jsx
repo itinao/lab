@@ -11,12 +11,17 @@ import request from '../../misc/request';
 import type {RootState} from '../../store/root';
 
 type Props = {
+  onContentButtonClick: (Array<{}>) => void,
+  category: 'nationalteam' | 'domestic' | 'foreign',
+};
+
+type State = {
   isFetched: boolean,
 };
 
 const className = ClassName('top', 'newsPage');
 
-class NewsPage extends React.Component<Props> {
+class NewsPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -24,9 +29,9 @@ class NewsPage extends React.Component<Props> {
       isFetched: false,
     };
 
-    this.newsDatas = [];
-    request.fetchNews(this.props.category, (newsDatas) => {
-      this.newsDatas = newsDatas;
+    (this: any).newsDatas = [];
+    request.fetchNews(this.props.category, (newsDatas: Array<{}>) => {
+      (this: any).newsDatas = newsDatas;
       this.setState({
         isFetched: true,
       });
@@ -42,7 +47,7 @@ class NewsPage extends React.Component<Props> {
     if (this.state.isFetched) {
       newsElem = (
         <ul>
-          {this.newsDatas.map((data) => {
+          {(this: any).newsDatas.map((data) => {
             if (!data.link || !data.title) {
               return null;
             }

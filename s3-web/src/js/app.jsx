@@ -9,6 +9,7 @@ import TopPage from './view/top/page';
 import NewsContentPage from './view/news-content/page';
 import Snackbar from './view/common/snackbar';
 
+import type {PageId} from './model/page-id';
 import type {CommonAction} from './actions/common-actions';
 import type {RootState} from './store/root';
 
@@ -16,20 +17,21 @@ import Firebase from './misc/firebase';
 
 type Props = {
   onReloadButtonClick: () => void,
+  onChangeButtonClick: () => void,
   state: RootState,
 };
 
 class App extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
-    this.firebase = new Firebase();
-    this.initializeServiceWorker();
+    (this: any).firebase = new Firebase();
+    (this: any).initializeServiceWorker();
   }
 
   initializeServiceWorker() {
     if (navigator.serviceWorker) {
       navigator.serviceWorker.register('service-worker.js').then((reg) => {
-        this.firebase.initializeMessaging(reg);
+        (this: any).firebase.initializeMessaging(reg);
       }).catch((err) => {
         console.error('Registration failed:', err);
       });

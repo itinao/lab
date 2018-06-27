@@ -29,7 +29,7 @@ module.exports = (opt_env) => {
 
   return [{
     mode: 'development',
-    devtool: false,
+    devtool: 'source-map',
     entry: {
       bundle: Path.resolve(__dirname, 'src/js/bundle.js'),
     },

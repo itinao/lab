@@ -4,15 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev-server": "firebase serve",
     "dev-watch": "webpack --mode development --watch",
     "prod": "webpack --mode production"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "ts-loader": "^4.4.2",
+    "awesome-typescript-loader": "^5.2.0",
     "typescript": "^2.9.2",
     "webpack": "^4.12.2",
     "webpack-cli": "^3.0.8"
+  },
+  "dependencies": {
+    "mobx": "^5.0.3",
+    "mobx-react": "^5.2.3",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
   }
 }

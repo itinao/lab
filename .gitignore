@@ -1,6 +1,7 @@
 # general
 .DS_Store
 .tmp
+*.log
 node_modules
 package-lock.json
 

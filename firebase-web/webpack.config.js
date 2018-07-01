@@ -1,4 +1,5 @@
-const path = require('path');
+// @ts-check
+const path = require("path");
 
 const project = {
   base(...args) {
@@ -13,19 +14,24 @@ const project = {
 };
 
 module.exports = {
-  mode: 'development',
-  entry: project.src('app.tsx'),
+  mode: "development",
+  devtool: 'inline-source-map',
+  entry: project.src("bundle.ts"),
   output: {
-    filename: 'bundle.js',
-    path: project.dist('js')
+    path: project.dist("js"),
+    filename: "bundle.js",
+    publicPath: "/"
   },
   module: {
-    rules: [{
-      test: /\.tsx$/,
-      use: 'awesome-typescript-loader',
-    }],
+    rules: [
+      {
+        test: /\.tsx?/,
+        loader: "ts-loader"
+      }
+    ]
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js']
+    modules: [project.base("node_modules"), project.src()],
+    extensions: [".ts", ".tsx", ".js", ".jsx", ".css"]
   }
 };

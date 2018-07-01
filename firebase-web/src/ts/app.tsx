@@ -1,6 +1,12 @@
-function echo<T>(param: T): T{
-    return param
+import React, { Component } from 'react';
+import CountContainer from './containers/CountContainer';
+
+class App extends Component {
+  render() {
+    return (
+      <CountContainer />
+    );
+  }
 }
 
-console.log(echo('test'));
-console.log(echo(123));
+export default App;

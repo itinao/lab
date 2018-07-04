@@ -1,4 +1,4 @@
-import ReactDom from 'react-dom';
+import * as ReactDOM from 'react-dom';
 import AppWrapper from './app-wrapper';
 
 function adjustFontSize() {
@@ -15,7 +15,7 @@ function adjustFontSize() {
   if (!containerElem) {
     return;
   }
-  ReactDom.render(
+  ReactDOM.render(
     AppWrapper(),
     containerElem
   );

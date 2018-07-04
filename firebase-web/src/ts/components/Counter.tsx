@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import * as React from "react";
 import { inject, observer } from 'mobx-react';
 import { CountStoreType } from '../store/CountStore';
 
@@ -8,7 +8,7 @@ type Props = {
 
 @inject('count')
 @observer
-class Counter extends Component<Props> {
+class Counter extends React.Component<Props> {
   render() {
     const { count } = this.props;
 

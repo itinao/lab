@@ -1,3 +1,5 @@
+import "../sass/bundle.scss"
+
 import * as React from "react";
 import { inject, observer } from 'mobx-react';
 import { CountStoreType } from '../store/CountStore';

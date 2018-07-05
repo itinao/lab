@@ -6,7 +6,7 @@ const project = {
     return path.join(__dirname, ...args);
   },
   src(...args) {
-    return this.base("src/ts/", ...args);
+    return this.base("src/", ...args);
   },
   dist(...args) {
     return this.base("public/assets/", ...args);
@@ -27,6 +27,18 @@ module.exports = {
       {
         test: /\.tsx?/,
         loader: "ts-loader"
+      },
+      {
+        test: /\.scss$/,
+        use: [{
+          loader: "style-loader" // creates style nodes from JS strings
+        },
+        {
+          loader: "css-loader" // translates CSS into CommonJS
+        },
+        {
+          loader: "sass-loader" // compiles Sass to CSS
+        }]
       }
     ]
   },

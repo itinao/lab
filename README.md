@@ -23,3 +23,8 @@ ServiceWorker Demo
 * Amazon CloudFront
 * Amazon API Gateway
 * Amazon CloudWatch: Events
+
+#### Other...(firebase-web Directory)
+* React
+* Mobx
+* TypeScript

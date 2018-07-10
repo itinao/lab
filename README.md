@@ -8,7 +8,7 @@ ServiceWorker Demo
 * Payment Request API
 
 ### Development
-#### Frontend
+#### Frontend(s3-web Directory)
 * React
 * Redux
 * sass
@@ -17,7 +17,7 @@ ServiceWorker Demo
 * mocha
 * webpack
 
-#### Backend
+#### Backend(lambda-func Directory)
 * AWS S3
 * AWS Lambda
 * Amazon CloudFront
